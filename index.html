@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陀思妥耶夫斯基人格测试 | 灵魂的地下室</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B4513',
+                        secondary: '#A0522D',
+                        dark: '#121212',
+                        darker: '#0A0A0A',
+                        light: '#D2B48C',
+                        muted: '#8B7355'
+                    },
+                    fontFamily: {
+                        typewriter: ['Courier Prime', 'Courier', 'monospace'],
+                        serif: ['Georgia', 'Cambria', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        @layer utilities {
+            .text-shadow { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); }
+            .fade-in { animation: fadeIn 0.8s ease-in-out; }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .paper-texture {
+                background-color: #1a1a1a;
+                background-blend-mode: overlay;
+            }
+            .option-hover:hover {
+                background-color: rgba(139, 69, 19, 0.2);
+                transform: translateX(5px);
+                transition: all 0.3s ease;
+            }
+            ::-webkit-scrollbar { width: 8px; }
+            ::-webkit-scrollbar-track { background: #121212; }
+            ::-webkit-scrollbar-thumb { background: #8B4513; border-radius: 4px; }
+        }
+    </style>
+</head>
+<body class="bg-darker text-light font-typewriter min-h-screen">
+    <div class="fixed inset-0 bg-darker opacity-80 z-0 pointer-events-none"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-8 min-h-screen flex flex-col">
+        <header class="text-center mb-8 mt-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4 text-shadow">陀思妥耶夫斯基人格测试</h1>
+            <p class="text-xl text-muted italic">—— 你的灵魂是一座复调的圣殿 ——</p>
+        </header>
+        <main class="flex-grow">
+            <!-- 首页：原版经典排版 -->
+            <section id="intro-section" class="fade-in">
+                <div class="bg-dark bg-opacity-90 p-6 md:p-8 rounded-lg border border-primary shadow-lg mb-8 paper-texture">
+                    <h2 class="text-2xl font-bold text-primary mb-4">审视那不可逾越的深渊</h2>
+                    <p class="mb-4 leading-relaxed">正如米哈伊尔·巴赫金所说，陀氏笔下的灵魂从来不是单一的。我们每个人内心都同时住着卑微的圣徒、狂傲的罪人、清醒的疯子和厌倦的虚无主义者。</p>
+                    <p class="mb-6 leading-relaxed">本测试通过40道灵魂拷问，勾勒出你内心九种力量的“多声部”博弈。请诚实作答，直面你内心的圣彼得堡。</p>
+                    <div class="text-center">
+                        <button id="start-test-btn" class="bg-primary hover:bg-secondary text-light font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                            开启灵魂复调测试
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-dark bg-opacity-80 p-6 rounded-lg border border-primary paper-texture">
+                    <h3 class="text-xl font-bold text-primary mb-3">九种精神向度</h3>
+                    <ul class="space-y-1.5 columns-1 md:columns-2 gap-4">
+                        <li><span class="text-primary font-bold">R</span> 拉斯科尔尼科夫：理性的僭越者</li>
+                        <li><span class="text-primary font-bold">I</span> 伊万·卡拉马佐夫：思想的叛逆者</li>
+                        <li><span class="text-primary font-bold">U</span> 地下室人：怨毒的清醒者</li>
+                        <li><span class="text-primary font-bold">S</span> 斯维德里盖洛夫：虚无的毁灭者</li>
+                        <li><span class="text-primary font-bold">M</span> 梅诗金公爵：纯粹的圣愚</li>
+                        <li><span class="text-primary font-bold">N</span> 娜斯塔霞：破碎的燃烧者</li>
+                        <li><span class="text-primary font-bold">L</span> 斯乜尔加尼科夫：逻辑的杀手</li>
+                        <li><span class="text-primary font-bold">K</span> 基里洛夫：自杀的成神者</li>
+                        <li><span class="text-primary font-bold">T</span> 斯捷潘：怯懦的理想家</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- 答题页：原版逻辑与样式 -->
+            <section id="test-section" class="hidden fade-in">
+                <div class="bg-dark bg-opacity-90 p-6 md:p-8 rounded-lg border border-primary shadow-lg mb-6 paper-texture">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-primary" id="test-title">自我解剖中...</h2>
+                        <div class="text-right">
+                            <span id="current-question" class="text-primary font-bold text-lg">1</span>
+                            <span class="text-muted text-lg" id="total-questions"> / 40</span>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <div class="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                            <div id="progress-bar" class="bg-primary h-1.5 rounded-full transition-all duration-300" style="width: 2.5%"></div>
+                        </div>
+                    </div>
+                    <div id="question-container" class="mb-8 min-h-[250px]">
+                        <h3 id="question-text" class="text-lg md:text-xl mb-6 leading-relaxed"></h3>
+                        <div id="options-container" class="space-y-4"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button id="prev-btn" class="bg-gray-800 hover:bg-gray-700 text-light font-bold py-2 px-5 rounded-lg transition disabled:opacity-40">上一题</button>
+                        <button id="next-btn" class="bg-primary hover:bg-secondary text-light font-bold py-2 px-5 rounded-lg transition disabled:opacity-40">下一题</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 结果页：定制色饼图+完整功能 -->
+            <section id="result-section" class="hidden fade-in">
+                <div class="bg-dark bg-opacity-90 p-6 md:p-8 rounded-lg border border-primary shadow-lg mb-8 paper-texture">
+                    <h2 class="text-2xl md:text-3xl font-bold text-primary mb-6 text-center uppercase tracking-widest">🎭 你的灵魂四重奏</h2>
+                    
+                    <!-- MBTI式人格代码 -->
+                    <div class="text-center mb-8">
+                        <h3 class="text-sm uppercase text-muted mb-2 tracking-widest">你的专属陀氏人格代码</h3>
+                        <div id="personality-code" class="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-[0.2em]"></div>
+                        <p id="code-desc" class="text-sm text-muted leading-relaxed"></p>
+                    </div>
+
+                    <!-- 定制色人格组成饼状图 -->
+                    <div class="mb-10 flex justify-center">
+                        <div class="w-full max-w-md aspect-square">
+                            <canvas id="personality-pie-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <hr class="border-primary/30 my-6">
+                    
+                    <!-- 主人格区块 -->
+                    <div id="primary-card" class="mb-8 p-5 bg-darker rounded-lg border-l-4 border-primary shadow-md">
+                        <h3 class="text-sm uppercase text-muted mb-2 tracking-widest">核心主人格</h3>
+                        <h4 id="primary-name" class="text-2xl font-bold text-primary mb-3"></h4>
+                        <p id="primary-score" class="text-sm text-muted mb-4"></p>
+                        <div id="primary-content" class="text-gray-300 leading-relaxed space-y-3"></div>
+                    </div>
+
+                    <hr class="border-primary/30 my-6">
+
+                    <!-- 副人格区块 -->
+                    <div id="secondary-card" class="mb-8 p-5 bg-darker rounded-lg border-l-2 border-primary/70 shadow-md">
+                        <h3 class="text-sm uppercase text-muted mb-2 tracking-widest">核心副人格</h3>
+                        <h4 id="secondary-name" class="text-xl font-bold text-primary mb-3"></h4>
+                        <p id="secondary-score" class="text-sm text-muted mb-4"></p>
+                        <div id="secondary-content" class="text-gray-300 leading-relaxed"></div>
+                    </div>
+
+                    <hr class="border-primary/30 my-6">
+
+                    <!-- 阴影人格双列区块 -->
+                    <h3 class="text-sm uppercase text-muted mb-4 tracking-widest text-center">灵魂阴影人格</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div id="shadow1-card" class="p-4 bg-darker rounded-lg border border-primary/50">
+                            <h4 id="shadow1-name" class="text-lg font-bold text-primary mb-2"></h4>
+                            <p id="shadow1-score" class="text-xs text-muted mb-3"></p>
+                            <p id="shadow1-content" class="text-gray-300 italic font-bold text-center"></p>
+                        </div>
+                        <div id="shadow2-card" class="p-4 bg-darker rounded-lg border border-primary/50">
+                            <h4 id="shadow2-name" class="text-lg font-bold text-primary mb-2"></h4>
+                            <p id="shadow2-score" class="text-xs text-muted mb-3"></p>
+                            <p id="shadow2-content" class="text-gray-300 italic font-bold text-center"></p>
+                        </div>
+                    </div>
+
+                    <hr class="border-primary/30 my-6">
+
+                    <!-- 灵魂四重奏深度解读区块 -->
+                    <div id="relation-card" class="p-5 bg-darker rounded-lg border border-primary shadow-md mb-6">
+                        <h3 class="text-xl font-bold text-primary mb-4 flex items-center">
+                            <i class="fa fa-music mr-3"></i> 灵魂四重奏深度解读
+                        </h3>
+                        <div id="relation-content" class="text-gray-300 leading-relaxed space-y-4"></div>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <button id="restart-btn" class="bg-gray-800 hover:bg-gray-700 text-light border border-primary font-bold py-3 px-10 rounded-lg transition transform hover:scale-105">
+                            重新审视灵魂
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+<footer class="text-center text-muted mt-12 pb-10 relative z-20">
+    <p>© 2026 陀思妥耶夫斯基读书社出品 </p>
+    <p class="text-sm mt-2 opacity-70">爱生活，甚于爱生活的意义</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    // 核心配置
+    const thresholds = { R:110, I:95, U:100, S:100, M:95, N:75, Sm:65, K:55, St:55 };
+    const fullNames = {
+        R:"拉斯科尔尼科夫｜理性的僭越者",
+        I:"伊万·卡拉马佐夫｜思想的叛逆者",
+        U:"地下室人｜怨毒的清醒者",
+        S:"斯维德里盖洛夫｜虚无的毁灭者",
+        M:"梅诗金公爵｜纯粹的圣愚",
+        N:"娜斯塔霞｜破碎的燃烧者",
+        Sm:"斯乜尔加尼科夫｜逻辑的杀手",
+        K:"基里洛夫｜自杀的成神者",
+        St:"斯捷潘｜怯懦的理想家"
+    };
+    const shortNames = {
+        R:"拉斯科尔尼科夫",I:"伊万·卡拉马佐夫",U:"地下室人",S:"斯维德里盖洛夫",
+        M:"梅诗金公爵",N:"娜斯塔霞",Sm:"斯乜尔加尼科夫",K:"基里洛夫",St:"斯捷潘"
+    };
+
+    // 【新增】9人格专属色值映射（100%匹配你提供的表格）
+    const personalityColorMap = {
+        R: '#8B0000',   // 拉斯科尔尼科夫 暗血红
+        I: '#2F4F4F',   // 伊万·卡拉马佐夫 暗岩灰
+        U: '#4A3A2A',   // 地下室人 潮湿褐
+        S: '#5C4033',   // 斯维德里盖洛夫 腐叶棕
+        M: '#F5E6D3',   // 梅诗金公爵 柔光米白
+        N: '#8B3A3A',   // 娜斯塔霞 焚尽玫瑰
+        Sm: '#556B2F',  // 斯乜尔加尼科夫 暗橄榄绿
+        K: '#B0C4DE',   // 基里洛夫 冷钢蓝
+        St: '#C2B280',  // 斯捷潘 褪色沙金
+        other: '#333333'// 其他特质 深空灰
+    };
+
+    // MBTI式人格代码映射
+    const codeMap = { R:'R', I:'I', U:'U', S:'S', M:'M', N:'N', Sm:'L', K:'K', St:'T' };
+    const codeReverseMap = {
+        R:"拉斯科尔尼科夫",I:"伊万·卡拉马佐夫",U:"地下室人",S:"斯维德里盖洛夫",
+        M:"梅诗金公爵",N:"娜斯塔霞",L:"斯乜尔加尼科夫",K:"基里洛夫",T:"斯捷潘"
+    };
+
+    // 人格角色库
+    const personalityRoles = {
+        R: {
+            name: "拉斯科尔尼科夫",
+            core: "理性僭越者",
+            role: "灵魂的行动者",
+            motive: "用行动证明自己的非凡，跨越平庸的道德边界",
+            shadow: "被良知束缚的野心，想成为超人却困于凡人的共情",
+            desc: "是你灵魂中那个不甘平庸、渴望用行动改写规则的部分，它驱动你在关键时刻做出突破常规的选择，却又会在行动后被良知反复拷问。"
+        },
+        I: {
+            name: "伊万·卡拉马佐夫",
+            core: "思想叛逆者",
+            role: "灵魂的审判者",
+            motive: "用逻辑拆解世界的虚伪，拒绝为不合理的秩序妥协",
+            shadow: "被思想困住的行动者，能解构一切却无法建立新的秩序",
+            desc: "是你灵魂中那个清醒、尖锐、绝不妥协的部分，它让你一眼看穿世俗的谎言与道德的虚伪，拒绝为任何不合理的规则低头，却也常常让你陷入思想的内耗。"
+        },
+        U: {
+            name: "地下室人",
+            core: "怨毒的清醒者",
+            role: "灵魂的防御者",
+            motive: "用刻薄与自嘲保护自己的尊严，拒绝被世俗驯化",
+            shadow: "被自卑困住的自由，用清醒给自己修建了一座无法逃离的监狱",
+            desc: "是你灵魂中那个敏感、骄傲、绝不示弱的部分，它让你在被冒犯时立刻竖起尖刺，用自嘲和刻薄抵御外界的伤害，却也把真正想靠近你的人挡在了门外。"
+        },
+        S: {
+            name: "斯维德里盖洛夫",
+            core: "虚无的毁灭者",
+            role: "灵魂的冒险者",
+            motive: "用享乐与放纵对抗虚无，在规则的边缘寻找活着的实感",
+            shadow: "被空虚困住的享乐者，用狂欢掩盖内心深处的绝望",
+            desc: "是你灵魂中那个叛逆、不羁、拒绝被任何道德束缚的部分，它让你在无聊的日常中寻找刺激，用放纵对抗生命的虚无，却也常常在狂欢过后陷入更深的孤独。"
+        },
+        M: {
+            name: "梅诗金公爵",
+            core: "纯粹的圣愚",
+            role: "灵魂的承接者",
+            motive: "用无差别的悲悯承接世间的苦难，用善良消解世界的戾气",
+            shadow: "被共情困住的拯救者，承接了太多苦难却忘了关照自己",
+            desc: "是你灵魂中那个柔软、纯粹、充满悲悯的核心，它让你对他人的苦难感同身受，愿意为了别人的幸福牺牲自己，是你所有善意与温柔的源头。"
+        },
+        N: {
+            name: "娜斯塔霞",
+            core: "破碎的燃烧者",
+            role: "灵魂的反抗者",
+            motive: "用自毁式的骄傲对抗世界的侮辱，用燃烧证明自己的高贵",
+            shadow: "被创伤困住的骄傲者，用毁灭自己的方式控诉世界的不公",
+            desc: "是你灵魂中那个骄傲、破碎、绝不低头的部分，它让你在被伤害时用最决绝的方式反抗，哪怕代价是毁灭自己，也绝不向侮辱你的人低头。"
+        },
+        Sm: {
+            name: "斯乜尔加尼科夫",
+            core: "逻辑的杀手",
+            role: "灵魂的执行者",
+            motive: "用绝对的逻辑贯彻行动，用结果证明自己的存在",
+            shadow: "被卑微困住的复仇者，用行动报复所有看不起自己的人",
+            desc: "是你灵魂中那个冷静、偏执、说到做到的部分，它让你把脑海中的想法变成现实，绝不做只会空谈的思想者，哪怕行动本身会带来毁灭，也绝不半途而废。"
+        },
+        K: {
+            name: "基里洛夫",
+            core: "自杀的成神者",
+            role: "灵魂的殉道者",
+            motive: "用绝对的自由意志证明自己的神性，用死亡定义生命的意义",
+            shadow: "被绝对自由困住的哲学家，为了证明自由反而被自由束缚",
+            desc: "是你灵魂中那个极致、纯粹、为了信念不顾一切的部分，它让你对自由与真理有着近乎偏执的追求，愿意为了自己认定的终极真理付出一切，包括生命。"
+        },
+        St: {
+            name: "斯捷潘",
+            core: "怯懦的理想家",
+            role: "灵魂的表演者",
+            motive: "用理想与辞令包装自己的怯懦，用表演获得他人的认可",
+            shadow: "被懦弱困住的理想者，用空谈掩盖自己不敢行动的事实",
+            desc: "是你灵魂中那个浪漫、理想主义、却又怯懦的部分，它让你对美好世界有着无限的向往，能说出动人的理想与誓言，却常常在需要行动时退缩，用表演掩盖自己的无力。"
+        }
+    };
+
+    // 人格文案库
+    const texts = {
+        R:{
+            primary:`你是一个在斧头与良知之间来回踱步的人。你相信自己是被选中的“超人”，有权跨越道德的界线去验证自己的理论。<br><br>
+            但你没有算到一件事：<strong>良知的感冒比任何逻辑都顽固</strong>。你的伟大计划总是卡在执行后的那一夜——你发烧、呓语、在人群中感到窒息。你不是不敢作恶，你是作恶之后无法与自己和解。`,
+            secondary:`你的行动力被一种顽固的良知拖住了后腿。每一次跨越，都伴随着一场灵魂的感冒。`,
+            shadow:`你差一点就跨过去了，但那一厘米，就是人与超人的距离。`
+        },
+        I:{
+            primary:`你是思想领域的弑神者，却在行动面前止步。你用逻辑证明了上帝的不存在，证明了万事皆许可，但你拒绝亲手执行。<br><br>
+            你把子弹交给了别人，然后退回那张入场券。你的痛苦来自<strong>“知道得太多，做得太少”</strong>。你审判世界，也审判自己。最终，你发现最难审判的，是那个把子弹递出去的自己。`,
+            secondary:`你提供了子弹，但拒绝扣动扳机。你的思想比行动锋利一万倍。`,
+            shadow:`你退回入场券的姿态，是你一生中最接近行动的时刻。`
+        },
+        U:{
+            primary:`你住在灵魂的地下室里，用自卑和自傲反复抽打自己。你看透了这世界的虚伪，却无力离开那间爬满蜘蛛的洗澡间。<br><br>
+            你的清醒是一种诅咒——<strong>越清醒，越痛苦；越痛苦，越清醒</strong>。你既无法融入世俗，也无法真正超越世俗。你的全部人生，就是一场针对自己的、永不落幕的审判。`,
+            secondary:`你的清醒是你最沉重的诅咒。你看透了一切，却什么也改变不了。`,
+            shadow:`那间爬满蜘蛛的洗澡间，是你为自己修建的、最舒适的监狱。`
+        },
+        S:{
+            primary:`你是虚无主义的享乐者，把毁灭当成一种美学。你看穿了道德的虚妄，于是选择在深渊里跳舞。你玩世不恭，游戏人间，用金钱和欲望填补那个上帝留下的空洞。<br><br>
+            但你骗不了自己——在享乐的间隙，你总能看到那间堆满蜘蛛的洗澡间。你的自杀，将是你一生中最后一个、也是最真诚的享乐行为。`,
+            secondary:`你在深渊里跳舞，把毁灭当成美学。但跳舞的人知道，音乐总会停的。`,
+            shadow:`你差一点就学会了用享乐来掩盖虚无。`
+        },
+        M:{
+            primary:`你是一面过于干净的镜子，照出了所有人的肮脏，却从不评判。你有一种可怕的能力：承接他人的苦难而不崩溃。<br><br>
+            你被世人称为“白痴”，因为你的善良在这个精于计算的世界里显得如此不合时宜。但你不知道的是——<strong>你的存在本身，就是对周围所有人的一场无声审判</strong>。他们爱你，也怕你。`,
+            secondary:`你的善良是一种天赋，也是一种诅咒。你照出了所有人的肮脏，却从不评判。`,
+            shadow:`他们说你是白痴，但他们不知道，你是唯一清醒的人。`
+        },
+        N:{
+            primary:`你是一团燃烧自己的火焰。你的美带有一种破碎的、致命的力量——让人想拯救你，又想与你同归于尽。<br><br>
+            你深知自己的肮脏，也深知自己的高贵。你在泥潭里仰望阳光，却觉得自己不配被照耀。你的每一次自我毁灭，都是一次对世界的控诉：<strong>看吧，这就是你们把我变成的样子</strong>。`,
+            secondary:`你在泥潭里仰望阳光，却觉得自己不配被照耀。你的破碎，是你最锋利的武器。`,
+            shadow:`你燃烧自己的姿态，是这世上最残酷的美。`
+        },
+        Sm:{
+            primary:`你是一把被虚无主义淬过毒的匕首。你身上带着洗不掉的厨房味儿——那是你私生子般的烙印，也是你全部怨毒的来源。<br><br>
+            你比伊万更诚实，也更危险：他提供子弹，而你扣动扳机。你有一种近乎偏执的逻辑能力——一旦接受了“万事皆许可”的前提，你就会像一台精密的杀人机器一样，冷静地、不带多余情感地，将逻辑贯彻到底。`,
+            secondary:`你比所有思想者都更诚实：你把他们不敢做的事，变成了现实。`,
+            shadow:`你扣动扳机的那一刻，证明了你比任何哲学家都更忠于逻辑。`
+        },
+        K:{
+            primary:`你是这个荒谬世界里最冷静的疯子。你选择用自杀来证明人是神。这不是绝望的逃离，而是一场精心策划的哲学首演。<br><br>
+            你要用自己的死亡，向全人类宣告：我，基里洛夫，完全拥有自由意志。你的冷静让人不安，你的温柔让人恐惧。你是唯一一个，<strong>把死亡变成创世行为的人</strong>。`,
+            secondary:`你选择用死亡来证明自由意志。这是最极致的哲学实验。`,
+            shadow:`你扣动扳机的那一刻，以为自己成了神。`
+        },
+        St:{
+            primary:`你是一个活在自己剧本里的悲剧演员。你满口启蒙与进步，却连自己的袜子都找不到。你把每一次懦弱都演成一出“不被理解的伟人”的宏大戏剧。<br><br>
+            你在内心深处知道自己的软弱，但更善于用华丽的言辞粉饰它。你既无法融入世俗，也无法超越世俗——于是你活成了一个永恒的、带着喜剧色彩的<strong>“多余人”</strong>。`,
+            secondary:`你把每一次逃避都演成了一场关于尊严的戏剧。你是一个可爱的、无害的小丑。`,
+            shadow:`你发表完那通激昂演说后，发现听众早已散场。`
+        }
+    };
+
+    // 40题完整题库
+    const coreQuestions = [
+        {question:"1. 路边陌生人遭遇不幸，你的第一念头：",options:["A. 苦难是不公平的，如果上帝允许，我就退回入场券。","B. 这种惨状让我想起灵魂里那间堆满蜘蛛的洗澡间，真恶心。","C. 走过去抱住他，即便被当成白痴，我也要分担他的眼泪。"]},
+        {question:"2. 聚会上，平庸之辈炫耀权势，你会：",options:["A. 在心里用复杂逻辑把他解构成一只发抖的畜生。","B. 故意说一句刻毒到让他社会性死亡的话，享受毁灭感。","C. 怜悯地看着他，觉得他在用虚荣掩盖快要溺死的心。"]},
+        {question:"3. 有人向你借钱，而你也快揭不开锅：",options:["A. 计算这笔钱对他和我的边际效用，如果他更惨，我给。","B. 觉得他在侮辱我的贫穷，一边羞辱一边把最后的硬币甩他脸上。","C. 恨不得把衣服也脱给他，为自己不能给更多而愧疚。"]},
+        {question:"4. 你如何看待“爱邻人”这种美德？",options:["A. 抽象地爱全人类容易，但要爱那个满身臭味的邻居，太难了。","B. 我连自己都恨，为什么要爱邻居？大家一起腐烂不好吗？","C. 我愿意亲吻邻居踩过的泥土，只要能消解世间的戾气。"]},
+        {question:"5. 面对别人的当众赞美，你的本能反应：",options:["A. 怀疑：他是不是想利用我？或者他只是个没见过世面的蠢材。","B. 愤怒：他在讽刺我，我必须反讽回去才能保护我那受损的尊严。","C. 惊恐：我不配！我这种肮脏的灵魂不配这种光亮。"]},
+        {question:"6. 电梯里陌生人突然哭泣，你会：",options:["A. 开始思考导致他哭泣的社会逻辑和哲学必然性。","B. 感到极度尴尬和厌烦，想按开电梯门逃离这令人作呕的感性。","C. 递过纸巾，即便对方不理我，我也想陪他一起沉默。"]},
+        {question:"7. 你认为世界上最令人恶心的东西是：",options:["A. 盲目的信从和低智的快乐。","B. 虚伪的体面和一切被称为“正常”的东西。","C. 那些冷酷无情、且以此为傲的人心。"]},
+        {question:"8. 深夜失眠时，你通常在脑海里做什么？",options:["A. 推演一个宏大的、足以颠覆现有道德准则的“超人计划”。","B. 翻找十年前的一件糗事，用自卑和自傲反复抽打自己的灵魂。","C. 祈祷，或者为那些素不相识的受苦者感到忧心忡忡。"]},
+        {question:"9. 关于你的居住环境，理想状态是：",options:["A. 一个像窄小棺材一样的阁楼，适合孕育伟大的思想。","B. 一个阴暗潮湿的地下室，那是清醒者对抗外界的最后堡垒。","C. 只要有阳光照进来，无论哪里都是天堂，但我通常住在混乱里。"]},
+        {question:"10. 意外获得巨款，你会怎么处理？",options:["A. 拿去资助我的伟大理想，证明我不仅能思考，还能行动。","B. 拿去当众烧掉，或者用它玩弄那些自以为高尚的人，看他们出丑。","C. 把它塞进贫苦寡妇和孩子的口袋里，然后默默离开。"]},
+        {question:"11. 你如何看待“无聊”这件事？",options:["A. 无聊是精神贫瘠的体现，真正的思想者从不无聊。","B. 无聊是生命的真谛，我通过各种作死和胡闹来确认自己还活着。","C. 无聊是一种恩赐，但我总是在为他人的命运感到心焦。"]},
+        {question:"12. 独处时看着镜子，你觉得自己：",options:["A. 是一粒怀揣火种的、孤独的尘埃。","B. 是一只拥有哲学思想的、卑微的甲虫。","C. 一个迷了路、找不到回天堂的路的孩子。"]},
+        {question:"13. 你认为人生的终极痛苦是什么？",options:["A. 发现自己有一颗想跨越一切的心，却只有一副平庸的躯壳。","B. 发现自己拥有绝对的选择自由，却发现没有任何选择是有意义的。","C. 看到这世界上的美正在被暴行撕碎，而自己却无能为力。"]},
+        {question:"14. 如果可以为自己写墓志铭，你会写：",options:["A. “他试图跨越，但在跨越之前就死于良知的感冒。”","B. “这里睡着一个拒绝与世界达成任何协议的疯子。”","C. “他曾爱过这世上的每一个受难者，虽然他是个白痴。”"]},
+        {question:"15. 关于“罪恶”，你最诚实的想法是：",options:["A. 罪恶取决于目标。为了伟大的终点，过程中的血腥可以被理性解释。","B. 罪恶是一种极致的审美。我想看看自己在深渊里能跳多美的舞。","C. 罪恶是灵魂的癌症，唯有通过苦难的磨砺才能获得微弱的救赎。"]},
+        {question:"16. 你相信有某种形式的“永恒”存在吗？",options:["A. 逻辑和真理是永恒的，尽管人类的认知是破碎的。","B. 也许永恒只是一个堆满蜘蛛的洗澡间，我们在里面永远互相凝视。","C. 爱和美是永恒的，即便这世界明天就毁灭。"]},
+        {question:"17. 如果上帝真的不存在，你会怎么做？",options:["A. 那我就是上帝，我将亲手制定这荒谬世界的平衡法则。","B. 那万事皆许可，我可以更彻底地、毫无心理负担地胡作非为了。","C. 那世界将变得无法忍受的悲哀，我宁愿立刻疯掉。"]},
+        {question:"18. 当有人在你面前阐述一套完美的“人神”理论时，你会：",options:["A. 内心认同，但我只会把它当作思想游戏，不会付诸实践。","B. 默默记下每一个字，然后在某个月黑风高的夜晚，将其变为现实。","C. 感到一阵眩晕的恶心，这种理论是对人类苦难的亵渎。"]},
+        {question:"19. 关于“自杀”，你认为它在什么情况下是合理的？",options:["A. 当生命成为实现更高目标的障碍时，它可以是一种理性的止损。","B. 当世界已被看透，自杀是最后一次严肃的哲学行动，用以证明自由意志的绝对主权。","C. 当痛苦超过了灵魂的承受极限，那是一种走投无路的绝望哀鸣。"]},
+        {question:"20. 你如何看待那些“把思想付诸实践，却造成血腥后果”的人？",options:["A. 他们是思想的殉道者，手段的残酷无损目标的伟大。","B. 他们比那些只会空谈的人真诚一万倍，至少他们敢做。","C. 他们是魔鬼的使徒，无论出于什么目的，暴行本身已经玷污了理想。"]},
+        {question:"21. 在沙龙里高谈阔论被年轻人用事实驳倒，你的第一反应是：",options:["A. 冷静思考，如果他是对的，就调整自己的理论体系。","B. 感到一阵被冒犯的刺痛，但随即安慰自己“庸人无法理解我的深邃”。","C. 当场发作，用更激烈的言辞和夸张的姿态，证明自己其实更“高贵”更“受迫害”。"]},
+        {question:"22. 如果有一个按钮，按下后可以证明“人完全拥有自由意志”，但你会在证明后立刻死去，你会按吗？",options:["A. 不按。用死亡来证明的东西毫无意义，我要活着看到结果。","B. 毫不犹豫地按下去。用我的死向世界宣告，我不是任何秩序的奴隶。","C. 不会按。我还有很多苦难要替别人承受，不能就这么自私地离开。"]},
+        {question:"23. 当命运给你一个“作恶却不会被发现”的机会：",options:["A. 我会权衡这是否符合我“大局观”下的个人进化计划。","B. 我会去做，纯粹是为了观察自己在作恶后的心理崩坏过程。","C. 我会因为恐惧和那该死的良知而立刻逃离现场。"]},
+        {question:"24. 你认为什么是真正的“美”？",options:["A. 逻辑严丝合缝的秩序感，一种充满力量的和谐。","B. 破碎、疯狂且致命的吸引力，让人想与之同归于尽。","C. 即使在最肮脏的泥潭里，依然向往阳光的那种纯洁。"]},
+        {question:"25. 当有人公开侮辱你的名誉：",options:["A. 冷静地用智力碾压他，让他意识到自己连被我仇恨的资格都没有。","B. 狂热地与其肉搏，甚至不惜通过毁掉自己来让他名誉扫地。","C. 原谅他，并反省自己是否真的在某处亏欠了他的灵魂。"]},
+        {question:"26. 在最绝望的低谷期，你会：",options:["A. 像死士一样疯狂阅读和思考，试图从逻辑上找到出口。","B. 彻底堕落，去赌博、去纵欲，把生活搞得像一摊烂泥。","C. 寻找一个纯洁的灵魂，跪在对方脚下请求宽恕。"]},
+        {question:"27. 你认为这个世界本质上是：",options:["A. 一个需要被智慧之手修正的、拙劣的实验室。","B. 一场毫无意义、且充满了恶趣味的滑稽戏剧。","C. 一条通往天堂的、布满荆棘的受难之路。"]},
+        {question:"28. 你最喜欢的天气状态是：",options:["A. 阴冷干燥，适合在阁楼里进行不被打扰的深思。","B. 暴雨倾盆，空气中弥漫着末世感的泥土气息。","C. 温暖而微弱的夕阳，适合感受万物平等的宁静。"]},
+        {question:"29. 当一段亲密关系变得紧张时，你倾向于：",options:["A. 用逻辑分析问题的根源，提出解决方案。","B. 用夸张的戏剧化姿态（哭泣、自贬、控诉）来获得对方的关注和愧疚。","C. 默默承受，认为这是自己应得的惩罚。"]},
+        {question:"30. 你如何看待“出身低微但凭借才智向上爬”的人？",options:["A. 敬佩。他们是打破阶级壁垒的强者，理应获得权力。","B. 厌恶。他们身上总是带着洗不掉的厨房味儿，再怎么伪装也掩盖不了骨子里的卑贱。","C. 同情。他们为了向上爬，一定吃了很多苦，灵魂可能早已千疮百孔。"]},
+        {question:"31. 你认为“全人类的幸福”值得用一个无辜孩子的眼泪去换取吗？",options:["A. 从功利主义角度看，这是值得的，尽管让人不适。","B. 不值得。我宁愿退回那张入场券，与受难者站在一起。","C. 绝对不值得。任何建立在无辜者痛苦之上的幸福，都是魔鬼的谎言。"]},
+        {question:"32. 你觉得自己是个好人吗？",options:["A. 我是个有原则的人。好与坏在宏大的逻辑面前毫无意义。","B. 我是个诚实的恶棍。这比虚伪的圣人强一万倍。","C. 我渴望成为好人，但我每天都在为自己的肮脏而战栗。"]},
+        {question:"33. 你最向往的生命状态是：",options:["A. 被众人敬畏，并在历史上留下不可磨灭的印记。","B. 彻底被世俗忽略，在荒诞中获得绝对的个人自由。","C. 被所有人接纳，并在爱与被爱中消融自我。"]},
+        {question:"34. 当你面对权力中心时：",options:["A. 我渴望掌握它，用它来推行我的真理，重塑世界。","B. 我只想嘲弄它，揭穿它那副道貌岸然的丑陋嘴脸。","C. 我想远离它，因为它会腐蚀人类灵魂中最后的纯真。"]},
+        {question:"35. 你认为历史是什么？",options:["A. 少数几个敢于突破常规的天才的意志体现。","B. 一连串毫无逻辑的、充满血腥气的意外叠加。","C. 是一场所有灵魂都在集体偿还罪业的修行。"]},
+        {question:"36. 在人生的最后一天，你会选择怎样度过？",options:["A. 整理毕生的思想和著作，确保它们能流传后世。","B. 去一个热闹的集市，对着人群发表一通谁也听不懂的激昂演说，然后心满意足地死去。","C. 找一个最恨我的人，请求他的宽恕，或者宽恕他。"]},
+        {question:"37. 你最害怕自己变成哪种人？",options:["A. 一个思想上的巨人，行动上的侏儒。","B. 一个永远带着一股怨毒的厨房味儿、被人看不起的奴才。","C. 一个冷酷无情、为了理念可以牺牲一切的机器。"]},
+        {question:"38. 面对这个满目疮痍的世界，你最想说的一句话：",options:["A. “你们这些凡夫俗子，还没准备好接受终极的真理。”","B. “二二得四就是一堵墙，但我偏要一头撞死在这墙上。”","C. “请宽恕我，也请宽恕每一个人，因为我们都生而有罪。”"]},
+        {question:"39. 选一个你潜意识里觉得最能代表“永恒”的场景：",options:["A. 一座高耸入云、冷冽孤傲的断头台。","B. 一间爬满蜘蛛、昏暗且永恒静止的洗澡间。","C. 一片被阳光照耀、所有人都在微笑的青翠草地。"]},
+        {question:"40. 如果可以，你希望自己最终的结局是：",options:["A. 在达成伟大智慧巅峰后，平静地离去。","B. 在一场轰轰烈烈、充满荒诞色彩的闹剧中戛然而止。","C. 在为了拯救某个卑微灵魂而做出的牺牲中闭眼。"]}
+    ];
+
+    // 40题计分矩阵
+    const scoringMatrix = [
+        {A:{I:15},B:{U:13,S:4,I:2},C:{M:12,N:4,R:3}},
+        {A:{R:8,I:8,U:2},B:{U:12,S:5,Sm:3},C:{M:11,N:6,R:2}},
+        {A:{R:12,I:4,M:2},B:{U:10,S:8,Sm:4},C:{M:13,N:3,R:4}},
+        {A:{I:16,U:1},B:{U:11,S:6,St:3},C:{M:14,N:3,R:2}},
+        {A:{R:7,I:8,U:2},B:{U:12,S:5,St:5},C:{N:15,M:5,R:2}},
+        {A:{R:6,I:11},B:{U:12,S:7,Sm:2},C:{M:13,N:5}},
+        {A:{R:7,I:10,U:1,K:2},B:{U:11,S:6,Sm:3},C:{M:12,N:7}},
+        {A:{R:15,I:2},B:{U:14,S:3,St:4},C:{M:12,N:5,R:2}},
+        {A:{R:11,I:5,U:2},B:{U:13,S:5,Sm:2},C:{M:10,N:4,St:3}},
+        {A:{R:13,I:5},B:{S:16,U:2,Sm:3},C:{M:14,N:3,R:3}},
+        {A:{R:10,I:7},B:{U:15,S:4,St:2},C:{M:11,N:6}},
+        {A:{R:9,I:6,K:3},B:{U:16,S:1,Sm:2},C:{M:12,N:5}},
+        {A:{R:10,I:8,U:1},B:{S:14,U:4,K:5},C:{M:12,N:6,R:3}},
+        {A:{R:13,I:5},B:{U:13,S:5,K:4},C:{M:14,N:4}},
+        {A:{R:16,I:1},B:{S:17,N:3},C:{M:12,N:5,R:4}},
+        {A:{I:15},B:{U:13,S:5,Sm:3},C:{M:13,N:5}},
+        {A:{R:14,I:3,K:2},B:{S:16,Sm:8},C:{M:11,N:5,I:4}},
+        {A:{I:15,R:3,S:1},B:{Sm:18,I:4,U:2},C:{M:12,N:6}},
+        {A:{R:14,I:5},B:{K:19,U:2,S:3},C:{M:13,N:5}},
+        {A:{R:14,I:4},B:{Sm:17,S:5},C:{M:12,N:5}},
+        {A:{R:10,I:8},B:{U:13,I:4,St:6},C:{St:17,U:5}},
+        {A:{R:11,I:9},B:{K:20,U:3},C:{M:15,N:3}},
+        {A:{R:17,Sm:2},B:{S:15,U:4,N:3},C:{M:12,N:5,R:3}},
+        {A:{I:14,R:5,K:3},B:{S:14,N:7,U:2},C:{N:15,M:6}},
+        {A:{R:12,I:7},B:{U:11,S:7,Sm:5},C:{M:13,N:4,R:3}},
+        {A:{R:14,I:5,K:2},B:{S:16,U:2,Sm:3},C:{M:13,N:4,R:4}},
+        {A:{R:11,I:6},B:{U:12,S:6,St:5},C:{M:13,N:5}},
+        {A:{R:10,I:6,U:1},B:{S:12,U:5,K:4},C:{M:12,N:6}},
+        {A:{R:9,I:7},B:{St:16,U:6,N:4},C:{M:11,N:9}},
+        {A:{R:12,I:5},B:{Sm:16,U:8,S:2},C:{N:15,M:6}},
+        {A:{R:14,I:3},B:{I:18,M:2,N:3},C:{M:14,K:5,N:2}},
+        {A:{R:13,I:4},B:{S:12,U:9,Sm:6},C:{N:14,M:6,R:3}},
+        {A:{R:15,I:3},B:{U:14,S:5,St:4},C:{M:14,N:4}},
+        {A:{R:16,I:2,Sm:3},B:{U:12,S:9,St:5},C:{M:13,N:5}},
+        {A:{R:13,I:5},B:{U:10,S:12,K:4},C:{M:13,N:5}},
+        {A:{R:13,I:8,K:2},B:{St:18,U:5},C:{M:15,N:6}},
+        {A:{R:8,I:12,St:6},B:{Sm:15,U:9},C:{M:12,N:5,K:-5}},
+        {A:{R:14,I:4},B:{U:15,S:4,K:6},C:{M:14,N:4}},
+        {A:{R:13,I:5,K:4},B:{U:15,S:4,Sm:5},C:{M:15,N:4}},
+        {A:{R:14,I:5},B:{S:15,U:5,St:6},C:{M:16,N:4,R:3}}
+    ];
+
+    // 全局变量
+    let currentQuestionIndex = 0;
+    const userAnswers = [];
+    const scores = { R:0, I:0, U:0, S:0, M:0, N:0, Sm:0, K:0, St:0 };
+    let isTransitioning = false;
+    let pieChart = null; // 饼状图实例，用于销毁重绘
+
+    // DOM元素
+    const introSection = document.getElementById('intro-section');
+    const testSection = document.getElementById('test-section');
+    const resultSection = document.getElementById('result-section');
+    const startTestBtn = document.getElementById('start-test-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const currentQuestionSpan = document.getElementById('current-question');
+    const totalQuestionsSpan = document.getElementById('total-questions');
+    const progressBar = document.getElementById('progress-bar');
+
+    // 核心计算函数
+    function calculateScores(){
+        Object.keys(scores).forEach(k => scores[k] = 0);
+        userAnswers.forEach((ans, i) => {
+            if(!ans || !scoringMatrix[i][ans]) return;
+            const matrix = scoringMatrix[i][ans];
+            Object.keys(matrix).forEach(k => scores[k] += matrix[k]);
+        });
+    }
+
+    // 获取前四名人格
+    function getTopFour(){
+        const arr = Object.keys(scores).map(p => ({
+            code: p,
+            ratio: scores[p] / thresholds[p],
+            score: scores[p],
+            threshold: thresholds[p]
+        }));
+        arr.sort((a, b) => b.ratio - a.ratio || b.score - a.score);
+        return {
+            primary: arr[0],
+            secondary: arr[1],
+            shadow1: arr[2],
+            shadow2: arr[3],
+            codeList: [arr[0].code, arr[1].code, arr[2].code, arr[3].code],
+            allScores: arr
+        };
+    }
+
+    // 动态生成灵魂四重奏深度解读
+    function generateRelationText(top4){
+        const { primary, secondary, shadow1, shadow2 } = top4;
+        const pRole = personalityRoles[primary.code];
+        const sRole = personalityRoles[secondary.code];
+        const sh1Role = personalityRoles[shadow1.code];
+        const sh2Role = personalityRoles[shadow2.code];
+
+        let text = `<p>你的灵魂是一座以<strong>${pRole.name}（${pRole.core}）</strong>为绝对核心的复调圣殿，四个声部各司其职、彼此拉扯、相互成就，构成了你独一无二的精神世界。它们不是孤立的特质，而是你在不同情境下，灵魂会呈现的不同面孔。</p>`;
+
+        text += `<p><strong>▌核心锚点：${pRole.name}，你的灵魂底色</strong><br>
+        ${pRole.desc}
+        它是你所有选择的底层动机，是你面对世界时最本能的反应模式。哪怕其他人格的特质会暂时浮现，最终你依然会回到这个核心锚点上，它定义了你是谁，你为什么而活。</p>`;
+
+        text += `<p><strong>▌共生副核：${sRole.name}，你的灵魂延伸</strong><br>
+        ${sRole.desc}
+        它与你的主人格形成了完美的互补：主人格是你的“显性自我”，副人格就是你的“隐性自我”——它替你表达了主人格不敢表达的欲望，填补了主人格的性格短板。当你在熟悉的环境中感到安全时，副人格的特质会自然流露，让你变得更完整、更立体。</p>`;
+
+        text += `<p><strong>▌隐秘阴影Ⅰ：${sh1Role.name}，你不愿承认的自己</strong><br>
+        ${sh1Role.desc}
+        这是你灵魂中被压抑、被否认的部分。你可能会在别人身上清晰地看到这种特质，却不愿承认自己内心也有同样的冲动。它只会在你极度疲惫、情绪失控、或是面临生死抉择的极端情境下浮现，每一次出现，都会让你对自己产生新的认知。</p>`;
+
+        text += `<p><strong>▌隐秘阴影Ⅱ：${sh2Role.name}，你灵魂的终极底色</strong><br>
+        ${sh2Role.desc}
+        这是你灵魂最深处、几乎从不显现的部分，它藏着你最极致的渴望，也藏着你最深的恐惧。它是你人格的“终极答案”——当你剥离了所有社会身份、所有他人期待、所有世俗规则之后，剩下的，就是这个最本真的自己。</p>`;
+
+        text += `<p><strong>▌灵魂的博弈与和解</strong><br>
+        你的四个人格之间，天然存在着内在的拉扯与博弈。主人格的核心诉求，常常会和阴影人格的隐秘冲动产生冲突，让你陷入“想做却不敢做，做了又后悔”的内耗之中。<br>
+        但这不是缺陷。在陀思妥耶夫斯基的世界里，统一的、扁平的人格才是最大的幻觉。你的分裂、你的矛盾、你的拉扯，恰恰是你最真实的部分——你不是一个“非黑即白”的符号，而是一个拥有完整复调的、活生生的灵魂。<br>
+        真正的和解，不是消灭阴影人格，而是看见它们、接纳它们，让四个声部和谐共振，最终活成一个既清醒又温柔、既坚定又柔软的完整的人。</p>`;
+
+        return text;
+    }
+
+    // 达标率显示：真实计算值，保留1位小数
+    function getShowRatio(ratio){
+        return (ratio * 100).toFixed(1);
+    }
+
+    // 生成MBTI式4字符人格代码
+    function generatePersonalityCode(top4){
+        const { primary, secondary, shadow1, shadow2 } = top4;
+        const code1 = codeMap[primary.code];
+        const code2 = codeMap[secondary.code];
+        const code3 = codeMap[shadow1.code];
+        const code4 = codeMap[shadow2.code];
+        const fullCode = code1 + code2 + code3 + code4;
+        const codeDesc = `${code1}=${codeReverseMap[code1]} | ${code2}=${codeReverseMap[code2]} | ${code3}=${codeReverseMap[code3]} | ${code4}=${codeReverseMap[code4]}`;
+        return { fullCode, codeDesc };
+    }
+
+    // 【重写】定制色饼状图渲染函数
+    function renderPieChart(top4){
+        const { primary, secondary, shadow1, shadow2, allScores } = top4;
+        // 计算其他特质总得分
+        const otherTotal = allScores.slice(4).reduce((sum, item) => sum + item.score, 0);
+        // 动态匹配专属色值
+        const dynamicColors = [
+            personalityColorMap[primary.code],
+            personalityColorMap[secondary.code],
+            personalityColorMap[shadow1.code],
+            personalityColorMap[shadow2.code],
+            personalityColorMap.other
+        ];
+        // 饼图数据
+        const pieData = {
+            labels: [
+                shortNames[primary.code],
+                shortNames[secondary.code],
+                shortNames[shadow1.code],
+                shortNames[shadow2.code],
+                '其他特质'
+            ],
+            datasets: [{
+                data: [primary.score, secondary.score, shadow1.score, shadow2.score, otherTotal],
+                backgroundColor: dynamicColors,
+                borderWidth: 2,
+                borderColor: '#0A0A0A' // 深色边框，适配浅色块
+            }]
+        };
+        // 销毁旧图表，避免重复渲染
+        if(pieChart) pieChart.destroy();
+        // 初始化新图表
+        const ctx = document.getElementById('personality-pie-chart').getContext('2d');
+        pieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: pieData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#D2B48C',
+                            font: { family: 'Courier Prime', size: 12 },
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#121212',
+                        titleColor: '#D2B48C',
+                        bodyColor: '#D2B48C',
+                        borderColor: '#8B4513',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context){
+                                const value = context.raw;
+                                const total = context.dataset.data.reduce((a,b)=>a+b,0);
+                                const percentage = Math.round((value/total)*100);
+                                return `${context.label}: ${percentage}% (${value}分)`;
+                            }
+                        }
+                    }
+                },
+                cutout: '40%',
+                animation: { animateRotate: true, animateScale: true }
+            }
+        });
+    }
+
+    // 渲染结果页
+    function renderResult(){
+        calculateScores();
+        const top4 = getTopFour();
+        const relationText = generateRelationText(top4);
+        const { fullCode, codeDesc } = generatePersonalityCode(top4);
+
+        // 填充人格代码
+        document.getElementById('personality-code').textContent = fullCode;
+        document.getElementById('code-desc').textContent = codeDesc;
+
+        // 主人格渲染
+        document.getElementById('primary-name').textContent = fullNames[top4.primary.code];
+        document.getElementById('primary-score').innerHTML = `得分：<strong>${top4.primary.score}</strong> / 阈值：${top4.primary.threshold} | 达标率：<span class="text-primary font-bold">${getShowRatio(top4.primary.ratio)}%</span>`;
+        document.getElementById('primary-content').innerHTML = texts[top4.primary.code].primary;
+
+        // 副人格渲染
+        document.getElementById('secondary-name').textContent = fullNames[top4.secondary.code];
+        document.getElementById('secondary-score').innerHTML = `得分：<strong>${top4.secondary.score}</strong> / 阈值：${top4.secondary.threshold} | 达标率：<span class="text-primary font-bold">${getShowRatio(top4.secondary.ratio)}%</span>`;
+        document.getElementById('secondary-content').textContent = texts[top4.secondary.code].secondary;
+
+        // 阴影人格1渲染
+        document.getElementById('shadow1-name').textContent = fullNames[top4.shadow1.code];
+        document.getElementById('shadow1-score').innerHTML = `得分：${top4.shadow1.score} / 阈值：${top4.shadow1.threshold} | 达标率：${getShowRatio(top4.shadow1.ratio)}%`;
+        document.getElementById('shadow1-content').textContent = texts[top4.shadow1.code].shadow;
+
+        // 阴影人格2渲染
+        document.getElementById('shadow2-name').textContent = fullNames[top4.shadow2.code];
+        document.getElementById('shadow2-score').innerHTML = `得分：${top4.shadow2.score} / 阈值：${top4.shadow2.threshold} | 达标率：${getShowRatio(top4.shadow2.ratio)}%`;
+        document.getElementById('shadow2-content').textContent = texts[top4.shadow2.code].shadow;
+
+        // 关系解读渲染
+        document.getElementById('relation-content').innerHTML = relationText;
+
+        // 显示结果页
+        testSection.classList.add('hidden');
+        resultSection.classList.remove('hidden');
+
+        // 渲染饼状图
+        renderPieChart(top4);
+    }
+
+    // 加载题目
+    function loadQuestion(index){
+        isTransitioning = false;
+        const q = coreQuestions[index];
+        questionText.textContent = q.question;
+        optionsContainer.innerHTML = '';
+
+        ['A','B','C'].forEach((char, i) => {
+            const div = document.createElement('div');
+            div.className = 'option-hover p-4 border border-gray-700 hover:border-primary rounded-lg cursor-pointer transition-all';
+            if(userAnswers[index] === char) div.classList.add('bg-primary/20', 'border-primary');
+            
+            div.innerHTML = `<span class="text-primary font-bold mr-3">${char}.</span><span class="text-gray-300">${q.options[i].substring(3)}</span>`;
+            div.onclick = () => {
+                if(isTransitioning) return;
+                userAnswers[index] = char;
+                isTransitioning = true;
+                div.classList.add('bg-primary/20', 'border-primary');
+                setTimeout(() => {
+                    if(index < coreQuestions.length - 1){
+                        currentQuestionIndex++;
+                        loadQuestion(currentQuestionIndex);
+                    } else {
+                        renderResult();
+                    }
+                }, 300);
+            };
+            optionsContainer.appendChild(div);
+        });
+
+        // 更新进度
+        currentQuestionSpan.textContent = index + 1;
+        totalQuestionsSpan.textContent = ` / ${coreQuestions.length}`;
+        progressBar.style.width = `${((index + 1) / coreQuestions.length) * 100}%`;
+        prevBtn.disabled = index === 0;
+        nextBtn.innerHTML = index === coreQuestions.length - 1 ? '查看灵魂结果' : '下一题';
+    }
+
+    // 事件监听
+    startTestBtn.addEventListener('click', () => {
+        introSection.classList.add('hidden');
+        testSection.classList.remove('hidden');
+        loadQuestion(0);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if(!isTransitioning && currentQuestionIndex > 0){
+            currentQuestionIndex--;
+            loadQuestion(currentQuestionIndex);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if(!isTransitioning && userAnswers[currentQuestionIndex]){
+            if(currentQuestionIndex < coreQuestions.length - 1){
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                renderResult();
+            }
+        }
+    });
+
+    restartBtn.addEventListener('click', () => location.reload());
+});
+</script>
+</body>
+</html>
